@@ -10,30 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
-        /* ——— BAŞLIK VE KULLANICI ADI ——— */
-        .username-header {
-            position: absolute;
-            top: 68px;
-            left: 675px;
-            font: 300 1rem 'Montserrat', sans-serif;
-            color: var(--pink);
-            z-index: 10;
-            text-align: left;
-            white-space: nowrap;
-        }
-
         /* ——— TEK NOKTADAN KONTROL ——— */
         :root {
             --metric-val-size: 26px;
             --metric-label-size: 26px;
-
             --pink-top: 230px;
             --pink-left: 60px;
             --blue-top: 310px;
             --blue-left: 275px;
             --green-top: 424px;
             --green-left: 485px;
-
             --pink: #ff00b8;
             --purple: #5d48ff;
             --card-bg: #101631;
@@ -57,12 +43,11 @@
         }
 
         body {
-            background: url('background.png') no-repeat center center fixed;
-            background-size: cover;
+            background: url('background.png') no-repeat center/cover fixed;
             font: 300 16px 'Montserrat', sans-serif;
             color: #fff;
             padding: 0 1rem 2rem;
-            overflow: auto
+            overflow: auto;
         }
 
         h3 {
@@ -73,6 +58,7 @@
             color: var(--text-light)
         }
 
+        /* ——— WRAPPER ——— */
         #wrapper {
             width: 768px;
             aspect-ratio: 1/1;
@@ -91,6 +77,22 @@
             background: url("assets/template_blank.png") center/contain no-repeat
         }
 
+        /* ——— BAŞLIK (artık wrapper’ın içinde) ——— */
+        .username-header {
+            position: absolute;
+            top: 20px;
+            left: 305px;
+            /* wrapper’ın sağından 60 px */
+            font-weight: 300;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--pink);
+            white-space: nowrap;
+            z-index: 11;
+            text-align: right;
+            white-space: nowrap;
+        }
+
         /* ——— PROFİL FOTOĞRAFI ——— */
         #avatar {
             position: absolute;
@@ -102,9 +104,9 @@
             display: none;
             z-index: 11;
             border: 1px solid #fff;
+            border-radius: 2px;
             background: #000;
             box-shadow: 0 0 4px rgba(0, 0, 0, .35);
-            border-radius: 2px;
         }
 
         /* ——— METRIC KUTULARI ——— */
@@ -114,13 +116,13 @@
             display: flex;
             flex-direction: column;
             gap: .45rem;
-            justify-content: center;
-            align-items: flex-start;
             font-style: italic;
             font-weight: 900;
+            line-height: 1.1;
             color: #fff;
             text-shadow: 0 3px 6px rgba(0, 0, 0, .3);
-            line-height: 1.1
+            align-items: flex-start;
+            justify-content: center;
         }
 
         .metric .line {
@@ -168,7 +170,7 @@
             gap: .8rem;
             justify-content: space-between;
             font-weight: 300;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .35)
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
         }
 
         .field {
@@ -187,11 +189,11 @@
         .field input {
             font-family: 'Montserrat', sans-serif;
             padding: .45rem .55rem;
-            border-radius: 8px;
             font-size: .8rem;
-            border: 1px solid var(--field-border);
             background: var(--field-bg);
-            color: #fff
+            border: 1px solid var(--field-border);
+            border-radius: 8px;
+            color: #fff;
         }
 
         .field input:focus {
@@ -230,26 +232,28 @@
 
 <body>
     <h3>Succinct Stats Card Builder</h3>
-    <div id="usernameHeader" class="username-header">anon</div>
 
     <div id="wrapper">
         <div id="board"></div>
+
+        <!-- BAŞLIK artık wrapper’ın içinde -->
+        <div id="usernameHeader" class="username-header">anon</div>
+
         <img id="avatar" src="" alt="avatar" />
-        <!-- PINK -->
+
+        <!-- METRICS -->
         <div id="pinkMetrics" class="metric">
             <div class="line"><span id="artsVal" class="val">0</span><span class="label">ARTS</span></div>
             <div class="line"><span id="floodsVal" class="val">0</span><span class="label">FLOODS</span></div>
             <div class="line"><span id="videosVal" class="val">0</span><span class="label">VIDEOS</span></div>
             <div class="line"><span id="postsVal" class="val">0</span><span class="label">POSTS</span></div>
         </div>
-        <!-- BLUE -->
         <div id="blueMetrics" class="metric">
             <div class="line"><span id="starsVal" class="val">0</span><span class="label">STARS</span></div>
             <div class="line"><span class="label">IN STAGE 1</span></div>
             <div class="line"><span id="proofVal" class="val">0</span><span class="label">PROOF</span></div>
             <div class="line"><span class="label">IN STAGE 2</span></div>
         </div>
-        <!-- GREEN -->
         <div id="greenMetrics" class="metric">
             <div class="line"><span id="proveVal" class="val">0</span><span class="label">$PROVE</span></div>
             <div class="line"><span class="label">TOKEN IN</span></div>
@@ -259,96 +263,74 @@
 
     <!-- FORM -->
     <form id="dashboard">
+        <!-- giriş alanları -->
         <div class="field"><label>Username</label><input type="text" id="username" placeholder="username" required>
         </div>
-        <div class="field"><label>Arts</label> <input type="number" id="arts" min="0" value="0"></div>
-        <div class="field"><label>Floods</label> <input type="number" id="floods" min="0" value="0"></div>
-        <div class="field"><label>Videos</label> <input type="number" id="videos" min="0" value="0"></div>
-        <div class="field"><label>Posts</label> <input type="number" id="posts" min="0" value="0"></div>
-        <div class="field"><label>Stars</label> <input type="number" id="stars" min="0" value="0"></div>
-        <div class="field"><label>Proof</label> <input type="number" id="proof" min="0" value="0"></div>
-        <div class="field"><label>$PROVE</label> <input type="number" id="prove" min="0" value="0"></div>
-        <div class="field"><label>Photo</label> <input type="file" id="photo" accept="image/*"></div>
+        <div class="field"><label>Arts</label><input type="number" id="arts" min="0" value="0"></div>
+        <div class="field"><label>Floods</label><input type="number" id="floods" min="0" value="0"></div>
+        <div class="field"><label>Videos</label><input type="number" id="videos" min="0" value="0"></div>
+        <div class="field"><label>Posts</label><input type="number" id="posts" min="0" value="0"></div>
+        <div class="field"><label>Stars</label><input type="number" id="stars" min="0" value="0"></div>
+        <div class="field"><label>Proof</label><input type="number" id="proof" min="0" value="0"></div>
+        <div class="field"><label>$PROVE</label><input type="number" id="prove" min="0" value="0"></div>
+        <div class="field"><label>Photo</label><input type="file" id="photo" accept="image/*"></div>
+
         <button type="button" id="downloadBtn" class="btn">Download PNG</button>
         <button type="button" id="tweetBtn" class="btn" style="background:var(--purple)">Tweet Image</button>
     </form>
 
     <script>
         /* ——— Responsive ölçek ——— */
-        const BASE_SCALE = 0.7, wrapper = document.getElementById('wrapper');
+        const wrapper = document.getElementById('wrapper');
         function fit() {
-            const wRatio = Math.min(1, innerWidth / 768), scale = BASE_SCALE * wRatio;
+            const BASE_SCALE = 0.7, wRatio = Math.min(1, innerWidth / 768), scale = BASE_SCALE * wRatio;
             wrapper.style.transform = `scale(${scale})`;
             wrapper.style.marginBottom = wRatio === 1 ? `-${768 * (1 - scale)}px` : '0';
-        }
-        addEventListener('resize', fit); fit();
+        } window.addEventListener('resize', fit); fit();
 
-        /* ——— Referanslar ——— */
+        /* ——— Değer güncelleme ——— */
         const refs = {
             header: document.getElementById('usernameHeader'),
             arts: artsVal, floods: floodsVal, videos: videosVal, posts: postsVal,
             stars: starsVal, proof: proofVal, prove: proveVal
         };
-
-        /* ——— update() | “+” ve “K” ekleme ——— */
         function update() {
             const uname = document.getElementById('username').value.trim() || 'anon';
-            refs.header.textContent = uname;
-            document.title = `${uname} | Succinct`;
-
-            /* + ekle */
+            refs.header.textContent = uname; document.title = `${uname} | Succinct`;
             ['arts', 'floods', 'posts'].forEach(k => {
-                const v = document.getElementById(k).value || 0;
-                refs[k].textContent = `${v}+`;
+                refs[k].textContent = `${document.getElementById(k).value || 0}+`;
             });
-
-            /* K ekle */
-            const sVal = document.getElementById('stars').value || 0;
-            refs.stars.textContent = `${sVal}K`;
-
-            /* Diğerleri */
+            refs.stars.textContent = `${document.getElementById('stars').value || 0}K`;
             ['videos', 'proof', 'prove'].forEach(k => {
                 refs[k].textContent = document.getElementById(k).value || 0;
             });
         }
-        document.querySelectorAll('#dashboard input[type="number"], #username')
-            .forEach(i => i.addEventListener('input', update));
-        update();
+        document.querySelectorAll('#dashboard input[type="number"],#username')
+            .forEach(i => i.addEventListener('input', update)); update();
 
-        /* ——— Fotoğraf yükleme ——— */
+        /* Fotoğraf */
         const photoInput = document.getElementById('photo'), avatar = document.getElementById('avatar');
         photoInput.addEventListener('change', e => {
             const file = e.target.files[0];
-            if (file) {
-                avatar.src = URL.createObjectURL(file);
-                avatar.style.display = 'block';
-            }
+            if (file) { avatar.src = URL.createObjectURL(file); avatar.style.display = 'block'; }
         });
 
-        /* ——— PNG HD indirme ——— */
-        downloadBtn.addEventListener('click', async () => {
-            /* Ölçek = 4 × cihaz piksel oranı – kaliteyi buradan arttır */
-            const SCALE = window.devicePixelRatio * 4;
-            const canvas = await html2canvas(wrapper, {
-                backgroundColor: null,
-                scale: SCALE,
-                useCORS: true     /* dış kaynaktan resim varsa sorun çıkmasın */
-            });
-            /* PNG’i Blob olarak indir – daha sağlıklı dosya boyutu */
+        /* PNG HD indirme */
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            const SCALE = window.devicePixelRatio * 4; /* indirme kalitesi */
+            const canvas = await html2canvas(wrapper, { backgroundColor: null, scale: SCALE, useCORS: true });
             canvas.toBlob(blob => {
                 const a = document.createElement('a');
                 a.download = 'succinct_stats_hd.png';
-                a.href = URL.createObjectURL(blob);
-                a.click();
+                a.href = URL.createObjectURL(blob); a.click();
                 URL.revokeObjectURL(a.href);
             }, 'image/png');
         });
 
-        /* ——— Tweet ——— */
-        tweetBtn.addEventListener('click', () => {
+        /* Tweet */
+        document.getElementById('tweetBtn').addEventListener('click', () => {
             const uname = document.getElementById('username').value.trim() || 'anon';
-            const text = encodeURIComponent(`${uname}'s Succinct stats! #Succinct`);
-            window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${uname}'s Succinct stats! #Succinct`)}`, '_blank');
         });
     </script>
 </body>
